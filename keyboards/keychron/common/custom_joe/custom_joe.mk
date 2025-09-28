@@ -1,0 +1,1 @@
+SRC += keyboards/keychron/common/custom_joe/macros.c
