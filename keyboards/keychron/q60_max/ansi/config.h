@@ -52,6 +52,7 @@
 #    define BAT_LEVEL_LED_LIST \
         { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
 
+#    define CAPS_LOCK_INDEX 15
 #    define LOW_BAT_IND_INDEX \
         { 57 }
 
