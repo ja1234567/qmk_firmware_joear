@@ -77,10 +77,10 @@
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_MODE
-#    ifdef ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-#        define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_LEFT_RIGHT
+#    ifdef ENABLE_RGB_MATRIX_CYCLE_UP_DOWN
+#        define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_UP_DOWN
 #    else
-// fallback to solid colors if RGB_MATRIX_CYCLE_LEFT_RIGHT is disabled in userspace
+// fallback to solid colors if RGB_MATRIX_CYCLE_UP_DOWN is disabled in userspace
 #        define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_COLOR
 #    endif
 #endif
@@ -90,7 +90,7 @@
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_SAT
-#    define RGB_MATRIX_DEFAULT_SAT UINT8_MAX
+#    define RGB_MATRIX_DEFAULT_SAT (UINT8_MAX * 13 / 16)
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_VAL
@@ -98,7 +98,7 @@
 #endif
 
 #ifndef RGB_MATRIX_DEFAULT_SPD
-#    define RGB_MATRIX_DEFAULT_SPD UINT8_MAX / 2
+#    define RGB_MATRIX_DEFAULT_SPD (UINT8_MAX / 16)
 #endif
 
 #ifndef RGB_MATRIX_LED_FLUSH_LIMIT
@@ -108,6 +108,7 @@
 #ifndef RGB_MATRIX_LED_PROCESS_LIMIT
 #    define RGB_MATRIX_LED_PROCESS_LIMIT ((RGB_MATRIX_LED_COUNT + 4) / 5)
 #endif
+
 
 struct rgb_matrix_limits_t {
     uint8_t led_min_index;
