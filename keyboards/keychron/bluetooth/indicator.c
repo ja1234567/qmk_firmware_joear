@@ -129,6 +129,8 @@ static pin_t host_led_pin_list[HOST_DEVICES_COUNT] = HOST_LED_PIN_LIST;
 #    define LED_DRIVER_DISABLE_NOEEPROM rgb_matrix_disable_noeeprom
 #    define LED_DRIVER_DISABLE_TIMEOUT_SET rgb_matrix_disable_timeout_set
 #    define LED_DRIVER_DISABLE_TIME_RESET rgb_matrix_disable_time_reset
+
+#    define SET_LED(idx, r, g, b) rgb_matrix_set_color(idx, r, g, b)
 #endif
 void indicator_init(void) {
     memset(&indicator_config, 0, sizeof(indicator_config));
@@ -482,14 +484,27 @@ __attribute__((weak)) void os_state_indicate(void) {
         SET_LED_ON(NUM_LOCK_INDEX);
     }
 #    endif
-#    if defined(CAPS_LOCK_INDEX)
+
+#if defined(CAPS_LOCK_INDEX_ARRAY) && defined(RGB_MATRIX_ENABLE)
     if (host_keyboard_led_state().caps_lock) {
-#        if defined(DIM_CAPS_LOCK)
-        SET_LED_OFF(CAPS_LOCK_INDEX);
-#        else
-        SET_LED_ON(CAPS_LOCK_INDEX);
-#        endif
+        const uint8_t caps_array[] = CAPS_LOCK_INDEX_ARRAY;
+        for (uint8_t i = 0; i < CAPS_LOCK_INDEX_ARRAY_LEN; i++) {
+        #if defined(DIM_CAPS_LOCK)
+            SET_LED_OFF(caps_array[i]);
+        #else
+            SET_LED(caps_array[i], 255, 0, 0);
+        #endif
+        }
     }
+#elif defined(CAPS_LOCK_INDEX)
+    if (host_keyboard_led_state().caps_lock) {
+        #if defined(DIM_CAPS_LOCK)
+        SET_LED_OFF(CAPS_LOCK_INDEX);
+        #else
+        SET_LED_ON(CAPS_LOCK_INDEX);
+        #endif
+    }
+#endif
 #    endif
 #    if defined(SCROLL_LOCK_INDEX)
     if (host_keyboard_led_state().scroll_lock) {

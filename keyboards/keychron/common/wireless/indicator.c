@@ -150,6 +150,8 @@ static pin_t p24g_led_pin_list[P24G_HOST_DEVICES_COUNT] = P24G_HOST_LED_PIN_LIST
 #    define LED_DRIVER_DISABLE_TIMEOUT_SET rgb_matrix_disable_timeout_set
 #    define LED_DRIVER_DISABLE_TIME_RESET rgb_matrix_disable_time_reset
 #    define LED_DRIVER_TIMEOUTED rgb_matrix_timeouted
+
+#    define SET_LED(idx, r, g, b) rgb_matrix_set_color(idx, r, g, b)
 #endif
 
 bool LED_INDICATORS_KB(void);
@@ -625,13 +627,25 @@ __attribute__((weak)) void os_state_indicate(void) {
 #        endif
     }
 #    endif
-#    if defined(CAPS_LOCK_INDEX)
+
+#if defined(CAPS_LOCK_INDEX_ARRAY) && defined(RGB_MATRIX_ENABLE)
     if (host_keyboard_led_state().caps_lock) {
-#        if defined(DIM_CAPS_LOCK)
+        const uint8_t caps_array[] = CAPS_LOCK_INDEX_ARRAY;
+        for (uint8_t i = 0; i < CAPS_LOCK_INDEX_ARRAY_LEN; i++) {
+        #if defined(DIM_CAPS_LOCK)
+            SET_LED_OFF(caps_array[i]);
+        #else
+            SET_LED(caps_array[i], 255, 0, 0);
+        #endif
+        }
+    }
+#elif defined(CAPS_LOCK_INDEX)
+    if (host_keyboard_led_state().caps_lock) {
+        #if defined(DIM_CAPS_LOCK)
         SET_LED_OFF(CAPS_LOCK_INDEX);
-#        else
+        #else
         SET_LED_ON(CAPS_LOCK_INDEX);
-#        endif
+        #endif
     }
 #    endif
 #    if defined(SCROLL_LOCK_INDEX)
