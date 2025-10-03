@@ -18,6 +18,7 @@
 
 #include "config.h"
 #include "bluetooth.h"
+#include "custom_joe_rgb.h"
 
 /* Indication of pairing */
 #ifndef INDICATOR_CONFIG_PARING

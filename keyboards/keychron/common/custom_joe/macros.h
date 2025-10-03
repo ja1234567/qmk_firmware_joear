@@ -15,9 +15,11 @@
 //...
 
 // Complicated Macros
-enum custom_joe_keycodes 
+enum custom_joe_keycodes
 {
     MC_DBJS = SAFE_RANGE,           // Debug Block JavaScript
     MC_DBCS,                        // Debug Block C#
     MC_SBLK,                        // Select Block
+
+    LT_CLNX,                        // Lights, Capslock Next
 };

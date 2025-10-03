@@ -24,6 +24,7 @@
 #include "rtc_timer.h"
 #include "keychron_common.h"
 #include "usb_main.h"
+#include "../custom_joe/custom_joe_rgb.h"
 #ifdef FACTORY_TEST_ENABLE
 #    include "factory_test.h"
 #endif
@@ -341,7 +342,7 @@ static void indicator_timer_cb(void *arg) {
             }
         }
 #endif
-        
+
         if ((indicator_config.value & LED_ON) && !time_up) {
             if (led_lin_list) writePin(led_lin_list[idx], HOST_LED_PIN_ON_STATE);
 #    if defined(COMMON_BT_LED_PIN) || defined(COMMON_P24G_LED_PIN)
@@ -353,7 +354,7 @@ static void indicator_timer_cb(void *arg) {
             if (led_pin != NO_PIN) writePin(led_pin, !COMMON_BT_LED_PIN_ON_STATE);
 #    endif
         }
-        
+
     }
 #endif
 
@@ -633,10 +634,11 @@ __attribute__((weak)) void os_state_indicate(void) {
         const uint8_t caps_array[] = CAPS_LOCK_INDEX_ARRAY;
         for (uint8_t i = 0; i < CAPS_LOCK_INDEX_ARRAY_LEN; i++) {
         #if defined(DIM_CAPS_LOCK)
-            SET_LED_OFF(caps_array[i]);
+                SET_LED_OFF(caps_array[i]);
         #else
-            SET_LED(caps_array[i], 255, 0, 0);
-        #endif
+                rgb_t color = getCapslockRGB();
+                SET_LED(caps_array[i], color.r, color.g, color.b);
+#endif
         }
     }
 #elif defined(CAPS_LOCK_INDEX)
@@ -647,7 +649,7 @@ __attribute__((weak)) void os_state_indicate(void) {
         SET_LED_ON(CAPS_LOCK_INDEX);
         #endif
     }
-#    endif
+#endif
 #    if defined(SCROLL_LOCK_INDEX)
     if (host_keyboard_led_state().scroll_lock) {
         SET_LED_ON(SCROLL_LOCK_INDEX);

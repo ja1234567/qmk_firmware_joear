@@ -22,7 +22,7 @@
 #include "bluetooth_config.h"
 #include "config.h"
 #include "rtc_timer.h"
-
+#include "../common/custom_joe/custom_joe_rgb.h"
 #if defined(LED_MATRIX_ENABLE) || defined(RGB_MATRIX_ENABLE)
 #    ifdef LED_MATRIX_ENABLE
 #        include "led_matrix.h"
@@ -490,9 +490,10 @@ __attribute__((weak)) void os_state_indicate(void) {
         const uint8_t caps_array[] = CAPS_LOCK_INDEX_ARRAY;
         for (uint8_t i = 0; i < CAPS_LOCK_INDEX_ARRAY_LEN; i++) {
         #if defined(DIM_CAPS_LOCK)
-            SET_LED_OFF(caps_array[i]);
+                SET_LED_OFF(caps_array[i]);
         #else
-            SET_LED(caps_array[i], 255, 0, 0);
+                rgb_t color = getCapslockRGB();
+                SET_LED(caps_array[i], color.r, color.g, color.b);
         #endif
         }
     }

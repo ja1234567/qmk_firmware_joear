@@ -18,4 +18,3 @@ SRC += \
      $(WIRELESS_DIR)/keychron_wireless_common.c
 
 VPATH += $(TOP_DIR)/keyboards/keychron/$(WIRELESS_DIR)
-

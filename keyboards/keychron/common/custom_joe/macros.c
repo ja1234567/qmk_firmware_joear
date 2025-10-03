@@ -1,24 +1,31 @@
 #include QMK_KEYBOARD_H
 #include "macros.h"
+#include "custom_joe_rgb.h"
 
 void selectBlock(void);
 void debugBlock(uint16_t keycode);
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) 
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
-    switch (keycode) 
+    switch (keycode)
     {
         case MC_SBLK:
-            if (record->event.pressed) 
+            if (record->event.pressed)
             {
                 selectBlock();
             }
             return false;
         case MC_DBJS:
         case MC_DBCS:
-            if (record->event.pressed) 
+            if (record->event.pressed)
             {
                 debugBlock(keycode);
+            }
+            return false;
+        case LT_CLNX:
+            if (record->event.pressed)
+            {
+                incrementCapslockRGB();
             }
             return false;
     }
@@ -41,7 +48,7 @@ void debugBlock(uint16_t keycode)
     wait_ms(10);
     tap_code16(MC_CUT);
     wait_ms(10);
-    
+
     SEND_STRING("try\n{\n");
     tap_code16(KC_DOWN);
 
@@ -60,6 +67,6 @@ void debugBlock(uint16_t keycode)
     tap_code16(KC_UP);
     tap_code16(KC_UP);
     tap_code16(KC_UP);
-    
+
     tap_code16(MC_PSTE);
 }
